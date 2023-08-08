@@ -5449,6 +5449,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5458,7 +5461,8 @@ __webpack_require__.r(__webpack_exports__);
         end_point: '',
         start_time: '',
         type: ''
-      }
+      },
+      error: ''
     };
   },
   created: function created() {},
@@ -5466,14 +5470,18 @@ __webpack_require__.r(__webpack_exports__);
     searchTicket: function searchTicket() {
       var _this = this;
 
-      console.log();
       this.axios.get("http://localhost/api/ticket/search", {
         params: this.params
       }).then(function (response) {
-        console.log(response);
         _this.tickets = response.data.data;
-      })["catch"](function (err) {
-        console.log(err);
+      })["catch"](function (error) {
+        if (error.response) {
+          _this.error = error.response.data.message;
+        } else if (error.request) {
+          console.log("network error");
+        } else {
+          console.log(error);
+        }
       });
     }
   }
@@ -28758,6 +28766,12 @@ var render = function () {
             },
             [_vm._v("Tìm kiếm")]
           ),
+          _vm._v(" "),
+          _c("div", { staticClass: "mt-2 text-danger " }, [
+            _vm.error != ""
+              ? _c("span", [_vm._v(_vm._s(_vm.error))])
+              : _vm._e(),
+          ]),
         ]),
       ]),
     ]),

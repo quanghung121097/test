@@ -23,6 +23,9 @@
                         </select>
                     </div>
                     <button type="button" class="mt-2 btn btn-primary" @click="searchTicket()">Tìm kiếm</button>
+                    <div class="mt-2 text-danger ">
+                        <span v-if="error != ''">{{error}}</span>
+                    </div>
                 </form>
             </div>
         </div>
@@ -67,21 +70,26 @@
                     end_point: '',
                     start_time: '',
                     type: '',
-                }
+                },
+                error: ''
             }
         },
         created() {
         },
         methods: {
             searchTicket() {
-                console.log();
                 this.axios
                     .get(`http://localhost/api/ticket/search`, { params: this.params })
                     .then(response => {
-                        console.log(response);
                         this.tickets = response.data.data
-                    }).catch(err => {
-                        console.log(err);
+                    }).catch((error) => {
+                        if (error.response) {
+                            this.error = error.response.data.message
+                        } else if (error.request) {
+                            console.log("network error");
+                        } else {
+                            console.log(error);
+                        }
                     });
             },
         }

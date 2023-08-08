@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
 
 class SearchTicketRequest extends FormRequest
 {
@@ -47,5 +49,15 @@ class SearchTicketRequest extends FormRequest
             'start_point' => 'Điểm xuất phát',
             'end_point' => 'Điểm đến',
         ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        $json = [
+            'success' => false,
+            'message' => implode(', ', $validator->errors()->all())
+        ];
+        $response = response($json, 400);
+        throw (new ValidationException($validator, $response))->status(400);
     }
 }
