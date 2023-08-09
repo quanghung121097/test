@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 
-class SearchTicketRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,15 +26,20 @@ class SearchTicketRequest extends FormRequest
     public function rules()
     {
         return [
-            'start_location' => 'required',
-            'end_location' => 'required'
+            'email' => 'required|email|unique:users',
+            'name' => 'required',
+            'password' => 'required|min:8|confirmed',
         ];
     }
 
     public function messages()
     {
         return [
-            'required' => ':attribute là bắt buộc'
+            'required' => ':attribute là bắt buộc',
+            'unique' => ':attribute đã tồn tại',
+            'email' => ':attribute k đúng định dạng',
+            'min' => ':attribute ít nhất 8 ký tự',
+            'confirmed' => ':attribute chưa được xác thực',
         ];
     }
 
@@ -46,8 +51,7 @@ class SearchTicketRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'start_location' => 'Điểm xuất phát',
-            'end_location' => 'Điểm đến',
+            'password' => 'mật khẩu'
         ];
     }
 

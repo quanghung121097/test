@@ -15,16 +15,17 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('start_point'); //
-            $table->string('end_point');
+            $table->integer('start_location'); //
+            $table->integer('end_location');
             $table->dateTime('start_time');
-            $table->tinyInteger('type')->default(1);
+            $table->tinyInteger('type_id')->default(1);
             $table->integer('price');
             $table->integer('fee');
             $table->integer('flight_number');
             $table->tinyInteger('tax')->default(10); //10%
             $table->integer('airline_company_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

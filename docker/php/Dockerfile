@@ -10,7 +10,7 @@ RUN apt-get install -y autoconf pkg-config libssl-dev \
     && npm install -g npm
 # RUN pecl install xdebug \
 #     && docker-php-ext-enable xdebug
-RUN chmod 777 /var/www
+RUN chmod -R 777 /var/www/html/
 RUN  docker-php-ext-configure \
         gd --enable-gd --with-freetype --with-jpeg
 RUN docker-php-ext-install bcmath mbstring intl opcache mysqli pdo pdo_mysql gd

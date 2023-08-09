@@ -7,17 +7,20 @@ use App\Models\Ticket;
 class TicketService
 {
 
-    private $ticket;
+    private $model;
 
-    public function __construct(Ticket $ticket)
+    public function __construct(Ticket $model)
     {
-        $this->ticket = $ticket;
+        $this->model = $model;
     }
 
 
     public function search($data)
     {
-        $query = $this->ticket;
+        $query = $this->model;
+        if (isset($data['with']) && count($data['with']) > 0) {
+            $query = $query->with($data['with']);
+        }
         if (isset($data['select']) && count($data['select']) > 0) {
             $query = $query->select($data['select']);
         }
@@ -51,22 +54,22 @@ class TicketService
         } else {
             $data = $query->limit(isset($data['limit']) ? (int)$data['limit'] : config('const.item_count'))->get();
         }
-
         return $data;
     }
+    
     public function create($data)
     {
-        $ticket = $this->ticket;
+        $model = $this->model;
         foreach ($data as $key => $value) {
-            $ticket->$key = $value;
+            $model->$key = $value;
         }
-        $ticket->save();
-        return $ticket;
+        $model->save();
+        return $model;
     }
 
     public function first($data)
     {
-        $query = $this->ticket;
+        $query = $this->model;
         foreach ($data as $key => $value) {
             if (is_array($value)) {
                 $query = $query->whereIn($key, $value);
@@ -78,12 +81,17 @@ class TicketService
         return $data;
     }
 
-    public function edit($ticket, $data)
+    public function edit($model, $data)
     {
         foreach ($data as $key => $value) {
-            $ticket->$key = $value;
+            $model->$key = $value;
         }
-        $ticket->save();
-        return $ticket;
+        $model->save();
+        return $model;
+    }
+
+    public function find($id)
+    {
+        return $this->model->find($id);
     }
 }

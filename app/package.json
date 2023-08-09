@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "@websanova/vue-auth": "^4.2.1",
         "laravel-vue-pagination": "^4.1.1",
         "vue-axios": "^3.4.0",
         "vue-router": "^3.5.3"

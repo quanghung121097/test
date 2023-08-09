@@ -1,6 +1,6 @@
 import TicketSearch from './components/TicketSearch.vue';
-import CreateProduct from './components/CreateProduct.vue';
-import EditProduct from './components/EditProduct.vue';
+import RegisterUser from './components/RegisterUser.vue';
+import LoginUser from './components/LoginUser.vue';
 
 export const routes = [{
         name: 'home',
@@ -8,18 +8,13 @@ export const routes = [{
         component: TicketSearch
     },
     {
-        name: 'detail',
-        path: '/detail',
-        component: CreateProduct
+        name: 'register',
+        path: '/register',
+        component: RegisterUser
     },
     {
-        name: 'create',
-        path: '/create',
-        component: CreateProduct
-    },
-    {
-        name: 'edit',
-        path: '/edit/:id',
-        component: EditProduct
+        name: 'login',
+        path: '/login',
+        component: LoginUser
     }
 ];

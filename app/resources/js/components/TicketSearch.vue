@@ -6,23 +6,29 @@
                 <form>
                     <div class="form-group">
                         <label>Điểm xuất phát</label>
-                        <input type="text" class="form-control" v-model="params.start_point">
+                        <select class="form-control" v-model="params.start_location">
+                            <option v-for="location in locations" :key="location.id" :value="location.id">{{location.name}}</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Điểm đến</label>
-                        <input type="text" class="form-control" v-model="params.end_point">
+                        <select class="form-control" v-model="params.end_location">
+                            <option v-for="location in locations" :key="location.id" :value="location.id">{{location.name}}</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Ngày bay</label>
                         <input type="datetime-local" class="form-control" v-model="params.start_time">
                     </div>
                     <div class="form-group">
-                        <label>Ngày bay</label>
-                        <select class="form-control" v-model="params.type">
-                            <option value="1">loại 1</option>
+                        <label>Loại vé</label>
+                        <select class="form-control" v-model="params.type_id">
+                            <option v-for="ticketType in ticketTypes" :key="ticketType.id" :value="ticketType.id">{{ticketType.name}}</option>
                         </select>
                     </div>
-                    <button type="button" class="mt-2 btn btn-primary" @click="searchTicket()">Tìm kiếm</button>
+                    <button type="button" class="mt-2 btn btn-primary" @click="searchTicket()">Tìm kiếm 
+                        <div v-show="loading" class="spinner-border spinner-border-sm ml-2 mr-2" role="status"></div>
+                    </button>
                     <div class="mt-2 text-danger ">
                         <span v-if="error != ''">{{error}}</span>
                     </div>
@@ -43,8 +49,8 @@
             </thead>
             <tbody>
                 <tr v-for="ticket in tickets" :key="ticket.id">
-                    <td>{{ ticket.airline_company_id }}</td>
-                    <td>{{ ticket.type }}</td>
+                    <td>{{ ticket.airline_company.name }}</td>
+                    <td>{{ ticket.type.name }}</td>
                     <td>{{ ticket.start_time }}</td>
                     <td>{{ ticket.flight_number }}</td>
                     <td>{{ ticket.price }}</td>
@@ -65,32 +71,72 @@
         data() {
             return {
                 tickets: [],
+                locations: [],
+                airlineCompanys: [],
+                ticketTypes: [],
                 params: {
-                    start_point: '',
-                    end_point: '',
+                    start_location: '',
+                    end_location: '',
                     start_time: '',
                     type: '',
                 },
-                error: ''
+                error: '',
+                loading: false
             }
         },
         created() {
+            this.getDataQuery();
         },
         methods: {
-            searchTicket() {
+            getDataQuery() {
                 this.axios
-                    .get(`http://localhost/api/ticket/search`, { params: this.params })
+                    .get(`/api/ticket`)
                     .then(response => {
-                        this.tickets = response.data.data
+                        if(response.data.success == true){
+                            let data = response.data.data
+                            this.locations = data.locations
+                            this.airlineCompanys = data.airlineCompanys
+                            this.ticketTypes = data.ticketTypes
+                            console.log(this.airlineCompanys)
+                        }
                     }).catch((error) => {
+                        this.tickets = []
                         if (error.response) {
                             this.error = error.response.data.message
                         } else if (error.request) {
-                            console.log("network error");
+                            this.error = "network error"
                         } else {
-                            console.log(error);
+                            this.error = error
                         }
-                    });
+                        this.loading = false
+                    })
+                    .finally(() => this.loading = false);
+            },
+            searchTicket() {
+                this.loading = true
+                this.axios
+                    .get(`/api/ticket/search`, { params: this.params })
+                    .then(response => {
+                        let data = response.data
+                        if(data.success == true){
+                            this.tickets = data.data
+                            this.error = ''
+                        }else{
+                            this.tickets = []
+                            this.error = data.message
+                        }
+                        console.log(this.tickets)
+                    }).catch((error) => {
+                        this.tickets = []
+                        if (error.response) {
+                            this.error = error.response.data.message
+                        } else if (error.request) {
+                            this.error = "network error"
+                        } else {
+                            this.error = error
+                        }
+                    })
+                    .finally(() => this.loading = false);
             },
         }
     }
