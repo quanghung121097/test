@@ -13,7 +13,7 @@ services:
       - mysql_test
     volumes:
       - ./logs/nginx:/var/log/nginx
-      - ./app:/var/www/html/app
+      - ./app:/var/www/html
     networks:
       - laravel_test
   php_test:
@@ -27,7 +27,7 @@ services:
       XDEBUG_MODE: develop,debug
       XDEBUG_CONFIG: client_host=host.docker.internal start_with_request=yes
     volumes:
-      - ./app:/var/www/html/app
+      - ./app:/var/www/html
     working_dir: /var/www/html
     depends_on:
       - mysql_test

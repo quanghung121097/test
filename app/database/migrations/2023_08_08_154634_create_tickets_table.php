@@ -17,7 +17,7 @@ class CreateTicketsTable extends Migration
             $table->id();
             $table->integer('start_location'); //
             $table->integer('end_location');
-            $table->dateTime('start_time');
+            $table->date('start_time');
             $table->tinyInteger('type_id')->default(1);
             $table->integer('price');
             $table->integer('fee');

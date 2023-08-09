@@ -43,4 +43,13 @@ class UserController extends Controller
         auth('api')->logout();
         return response()->json(['message' => 'đăng xuất thành công']);
     }
+
+    public function check()
+    {
+
+        if(auth('api')->user()){
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['success' => false]);
+    }
 }

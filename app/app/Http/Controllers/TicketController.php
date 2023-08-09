@@ -79,7 +79,7 @@ class TicketController extends Controller
         }
     }
 
-    public function show($id)
+    public function detail($id)
     {
         $ticket = $this->ticketService->find($id);
         if (!empty($ticket)) {
