@@ -53,6 +53,7 @@
 </template>
  
 <script>
+import { mapActions } from "vuex";
 export default {
   data: function () {
     return {
@@ -65,27 +66,41 @@ export default {
     };
   },
   methods: {
-    login() {
-      this.loading = true;
-      this.axios
-        .post("/api/auth/login", {
-          email: this.email,
-          password: this.password,
-        })
-        .then((response) => {
+    // async login() {
+    //   this.loading = true;
+    //   await this.axios
+    //     .post("/api/auth/login", {
+    //       email: this.email,
+    //       password: this.password,
+    //     })
+    //     .then((response) => {
           
-          let token = response.headers.authorization
-          let data = response.data
-          data.token = token
-          localStorage.setItem('user', JSON.stringify(data));
-          this.error = false;
-          this.errors = '';
-        })
-        .catch((err) => {
-          this.error = true;
-          this.errors = err.response.data.message;
-        })
-        .finally(() => (this.loading = false));
+    //       let token = response.headers.authorization
+    //       let data = response.data
+    //       data.token = token
+    //       localStorage.setItem('user', JSON.stringify(data));
+    //       this.error = false;
+    //       this.errors = '';
+    //     })
+    //     .catch((err) => {
+    //       this.error = true;
+    //       this.errors = err.response.data.message;
+    //     })
+    //     .finally(() => (this.loading = false));
+    // },
+    ...mapActions(["LogIn"]),
+    async login() {
+      const User = new FormData();
+      User.append("email", this.email);
+      User.append("password", this.password);
+      try {
+          await this.LogIn(User);
+          this.$router.push("/");
+          this.error = false
+      } catch (error) {
+        this.error = true;
+        this.errors = err.response.data.message;
+      }
     },
   },
 };

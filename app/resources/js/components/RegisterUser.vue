@@ -51,9 +51,9 @@ export default {
     }
   },
   methods: {
-    register() {
+    async register() {
         this.loading = true
-        this.axios.post('/api/auth/register', {
+        await this.axios.post('/api/auth/register', {
             name: this.name,
             email: this.email,
             password: this.password,
