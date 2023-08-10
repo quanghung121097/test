@@ -15,12 +15,9 @@
                         v-if="!isLoggedIn"
                         >Đăng nhập</router-link
                     >
-                    <a
-                        class="nav-item nav-link router-link-exact-active router-link-active"
+                    <button class="nav-item nav-link router-link-exact-active router-link-active"
                         @click="logout"
-                        v-if="isLoggedIn"
-                        >Đăng xuất</a
-                    >
+                        v-if="isLoggedIn">Đăng xuất</button>
                     <router-link to="/" class="nav-item nav-link"
                         >Trang chủ</router-link
                     >

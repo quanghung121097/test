@@ -5139,9 +5139,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {};
@@ -28299,7 +28296,7 @@ var render = function () {
                 _vm._v(" "),
                 _vm.isLoggedIn
                   ? _c(
-                      "a",
+                      "button",
                       {
                         staticClass:
                           "nav-item nav-link router-link-exact-active router-link-active",
